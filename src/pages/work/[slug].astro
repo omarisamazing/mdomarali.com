@@ -1,0 +1,244 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import { cases, getCase } from "../../data/cases";
+
+export async function getStaticPaths() {
+  return cases.map((c) => ({ params: { slug: c.slug } }));
+}
+
+const { slug } = Astro.params;
+const study = getCase(slug ?? "");
+
+if (!study) {
+  return Astro.redirect("/#work");
+}
+
+const idx = cases.findIndex((c) => c.slug === study.slug);
+const prev = cases[(idx - 1 + cases.length) % cases.length];
+const next = cases[(idx + 1) % cases.length];
+---
+
+<Layout
+  title={`${study.title} | Md. Omar Ali`}
+  description={study.summary}
+>
+  <Nav />
+
+  <main class="mx-auto max-w-4xl px-5 py-14">
+    <nav class="mb-8" aria-label="Breadcrumb">
+      <ol class="flex flex-wrap items-center gap-2 text-sm text-ink-muted">
+        <li><a href="/" class="transition hover:text-ink">Home</a></li>
+        <li aria-hidden="true">/</li>
+        <li><a href="/work" class="transition hover:text-ink">Work</a></li>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" class="max-w-[40ch] truncate text-ink">{study.title}</li>
+      </ol>
+    </nav>
+    <p class="text-xs font-semibold uppercase tracking-widest text-ink-muted">{study.eyebrow}</p>
+    <h1 class="display-lg mt-3">{study.title}</h1>
+    <p class="mt-3 inline-block rounded-full bg-surface-2 px-3 py-1 text-xs font-semibold text-ink">
+      {study.outcome}
+    </p>
+    <p class="mt-5 max-w-2xl text-lg leading-snug text-ink-muted">{study.summary}</p>
+
+    {study.videos.length > 0 && (
+      <section class="mt-10 grid gap-4" aria-label="Project videos">
+        {study.videos.map((v) => (
+          <figure class="overflow-hidden rounded-xl border border-hairline-soft bg-surface-1">
+            <video
+              src={v.src}
+              poster={v.poster || undefined}
+              controls
+              preload="metadata"
+              playsinline
+              class="aspect-video w-full bg-black"
+              aria-label={v.label}
+            />
+            <figcaption class="px-5 py-3 text-sm text-ink-muted">{v.label}</figcaption>
+          </figure>
+        ))}
+      </section>
+    )}
+
+    {study.gallery.length > 0 && (
+      <section class="mt-10" aria-label="Project gallery">
+        <div
+          class="work-gallery relative overflow-hidden rounded-xl border border-hairline-soft bg-surface-1 shadow-[0_0_90px_-24px_color-mix(in_srgb,var(--color-gradient-violet)_45%,transparent)]"
+          data-gallery
+          tabindex="0"
+        >
+          <img
+            data-gallery-main
+            src={study.gallery[0].src}
+            alt={study.gallery[0].alt}
+            class="aspect-video w-full object-cover object-top transition-opacity duration-200 ease-out motion-reduce:transition-none"
+          />
+          {study.gallery.length > 1 && (
+            <>
+              <button
+                type="button"
+                data-gallery-prev
+                class="absolute left-3 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-ink px-3.5 py-2 text-sm font-bold text-canvas shadow-lg ring-1 ring-black/15 backdrop-blur transition hover:scale-105"
+                aria-label="Previous image"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                data-gallery-next
+                class="absolute right-3 top-1/2 -translate-y-1/2 rounded-full border border-white/20 bg-ink px-3.5 py-2 text-sm font-bold text-canvas shadow-lg ring-1 ring-black/15 backdrop-blur transition hover:scale-105"
+                aria-label="Next image"
+              >
+                →
+              </button>
+              <p
+                data-gallery-count
+                class="absolute bottom-3 right-3 rounded-full bg-ink px-3 py-1 text-xs font-semibold text-canvas shadow-lg ring-1 ring-black/15"
+              >
+                1 / {study.gallery.length}
+              </p>
+            </>
+          )}
+        </div>
+        {study.gallery.length > 1 && (
+            <div class="mt-3 grid grid-cols-4 gap-2" role="group" aria-label="Gallery thumbnails">
+            {study.gallery.map((g, i) => (
+              <button
+                type="button"
+                data-gallery-thumb={i}
+                class="overflow-hidden rounded-lg border border-hairline-soft transition hover:opacity-90"
+                aria-label={`Show image ${i + 1}`}
+              >
+                <img src={g.src} alt="" loading="lazy" class="aspect-[16/10] w-full object-cover object-top" />
+              </button>
+            ))}
+          </div>
+        )}
+        <script define:vars={{ gallery: study.gallery }}>
+          (() => {
+            const root = document.querySelector("[data-gallery]");
+            if (!root) return;
+            const main = root.querySelector("[data-gallery-main]");
+            const count = root.querySelector("[data-gallery-count]");
+            const section = root.closest("section");
+            const thumbs = section ? Array.from(section.querySelectorAll("[data-gallery-thumb]")) : [];
+            let index = 0;
+            let swapToken = 0;
+            const show = (i) => {
+              index = (i + gallery.length) % gallery.length;
+              const target = gallery[index];
+              const apply = () => {
+                if (main) {
+                  main.src = target.src;
+                  main.alt = target.alt;
+                  main.style.opacity = "1";
+                }
+              };
+              if (main) {
+                const token = ++swapToken;
+                main.style.opacity = "0";
+                const pre = new Image();
+                pre.onload = () => { if (token === swapToken) apply(); };
+                pre.onerror = () => { if (token === swapToken) apply(); };
+                pre.src = target.src;
+                // Cached images may never fire load: apply on next frame as fallback.
+                requestAnimationFrame(() => requestAnimationFrame(() => {
+                  if (token === swapToken && pre.complete) apply();
+                }));
+              } else {
+                apply();
+              }
+              if (count) count.textContent = `${index + 1} / ${gallery.length}`;
+              thumbs.forEach((t, ti) => {
+                const isActive = ti === index;
+                t.classList.toggle("ring-2", isActive);
+                t.classList.toggle("ring-accent", isActive);
+                if (isActive) t.setAttribute("aria-current", "true");
+                else t.removeAttribute("aria-current");
+              });
+            };
+            root.querySelector("[data-gallery-prev]")?.addEventListener("click", () => show(index - 1));
+            root.querySelector("[data-gallery-next]")?.addEventListener("click", () => show(index + 1));
+            root.addEventListener("keydown", (e) => {
+              if (e.key === "ArrowLeft") show(index - 1);
+              if (e.key === "ArrowRight") show(index + 1);
+            });
+            thumbs.forEach((t, ti) => t.addEventListener("click", () => show(ti)));
+            show(0);
+          })();
+        </script>
+      </section>
+    )}
+
+    <section class="mt-12">
+      <h2 class="display-md">The brief</h2>
+      <ul class="mt-4 space-y-2 text-[15px] text-ink-muted">
+        {study.brief.map((b) => <li class="flex gap-2"><span aria-hidden="true">-</span><span>{b}</span></li>)}
+      </ul>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="display-md">Method</h2>
+      <ol class="mt-4 grid gap-4 md:grid-cols-2">
+        {
+          study.method.map((m, i) => (
+            <li class="rounded-xl border border-hairline-soft bg-surface-1 p-6">
+              <p class="text-sm font-bold text-ink-muted">0{i + 1}</p>
+              <p class="mt-1 font-semibold tracking-tight">{m.step}</p>
+              <p class="mt-1 text-sm text-ink-muted">{m.detail}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="mt-10 rounded-xxl bg-gradient-violet p-7">
+      <h2 class="text-2xl font-semibold tracking-tight">Findings</h2>
+      <ul class="mt-3 space-y-2 text-[15px] text-white/90">
+        {study.findings.map((f) => <li class="flex gap-2"><span aria-hidden="true">-</span><span>{f}</span></li>)}
+      </ul>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="display-md">Stack</h2>
+      <div class="mt-4 flex flex-wrap gap-2">
+        {study.stack.map((t) => (
+          <span class="rounded-full bg-surface-2 px-3 py-1.5 text-xs font-medium text-ink">{t}</span>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="display-md">Next steps</h2>
+      <ul class="mt-4 space-y-2 text-[15px] text-ink-muted">
+        {study.nextSteps.map((n) => <li class="flex gap-2"><span aria-hidden="true">-</span><span>{n}</span></li>)}
+      </ul>
+    </section>
+
+    <div class="mt-12 flex flex-wrap gap-3">
+      <a href="/contact" class="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas">
+        Ask about this case
+      </a>
+      <a href="/work" class="rounded-full bg-surface-1 px-5 py-2.5 text-sm font-medium text-ink">
+        All work
+      </a>
+    </div>
+
+    <nav class="mt-10 grid gap-4 border-t border-hairline-soft pt-8 sm:grid-cols-2" aria-label="More cases">
+      <a href={`/work/${prev.slug}`} class="group block rounded-xl border border-hairline-soft bg-surface-1 p-5 transition hover:bg-surface-2">
+        <span class="text-xs font-semibold uppercase tracking-widest text-ink-muted">← Previous</span>
+        <span class="mt-2 block font-semibold tracking-tight group-hover:text-accent">{prev.title}</span>
+        <span class="mt-1 block text-sm text-ink-muted">{prev.outcome}</span>
+      </a>
+      <a href={`/work/${next.slug}`} class="group block rounded-xl border border-hairline-soft bg-surface-1 p-5 text-right transition hover:bg-surface-2">
+        <span class="text-xs font-semibold uppercase tracking-widest text-ink-muted">Next →</span>
+        <span class="mt-2 block font-semibold tracking-tight group-hover:text-accent">{next.title}</span>
+        <span class="mt-1 block text-sm text-ink-muted">{next.outcome}</span>
+      </a>
+    </nav>
+  </main>
+
+  <Footer />
+</Layout>

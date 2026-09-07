@@ -1,11 +1,65 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import FeaturedWork from "../components/FeaturedWork.astro";
+import ServicesGrid from "../components/ServicesGrid.astro";
+import VideoWork from "../components/VideoWork.astro";
+import ProcessTimeline from "../components/ProcessTimeline.astro";
+import AboutTeaser from "../components/AboutTeaser.astro";
+import NotesTeaser from "../components/NotesTeaser.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <Layout>
-	<Welcome />
+  <Nav />
+  <main>
+    {/* Story order: you → your work → your crafts → work in motion →
+        how you work → who you are → what you share. Reorder by moving lines. */}
+    <Hero />
+    <FeaturedWork />
+    <section class="mx-auto max-w-6xl px-5 pb-4 pt-4">
+      <p class="text-xs font-semibold uppercase tracking-widest text-ink-muted">Who this is for</p>
+      <h2 class="display-lg mt-3 max-w-3xl">Best for teams that need proof, not promises.</h2>
+      <div class="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-xl border border-hairline-soft bg-surface-1 p-6">
+          <h3 class="font-semibold tracking-tight">Founders</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-muted">Investor-ready decks and traction visuals that survive due-diligence questions.</p>
+        </div>
+        <div class="rounded-xl border border-hairline-soft bg-surface-1 p-6">
+          <h3 class="font-semibold tracking-tight">Managers</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-muted">Dashboards and insight briefs your team can act on Monday morning.</p>
+        </div>
+        <div class="rounded-xl border border-hairline-soft bg-surface-1 p-6">
+          <h3 class="font-semibold tracking-tight">Researchers</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-muted">Clean data, documented method, and charts with sources attached.</p>
+        </div>
+        <div class="rounded-xl border border-hairline-soft bg-surface-1 p-6">
+          <h3 class="font-semibold tracking-tight">Marketers</h3>
+          <p class="mt-2 text-sm leading-relaxed text-ink-muted">SEO briefs and content that compound, plus video cuts for launch.</p>
+        </div>
+      </div>
+    </section>
+    <section class="border-y border-hairline-soft bg-surface-1/40">
+      <div class="mx-auto max-w-6xl px-5 py-24">
+        <p class="text-xs font-semibold uppercase tracking-widest text-ink-muted">How I can help</p>
+        <h2 class="display-lg mt-3 max-w-3xl">One hire, three outcomes: insight, narrative, and delivery.</h2>
+        <p class="mt-4 max-w-2xl text-lg text-ink-muted">
+          Unlike a pure agency or a gallery-only designer, every engagement ships with
+          method plus artifact plus handover, so your team can reuse it.
+        </p>
+        <div class="mt-10">
+          <ServicesGrid teaser />
+        </div>
+        <a href="/about#services" class="mt-8 inline-block rounded-full bg-surface-1 px-5 py-2.5 text-sm font-medium text-ink transition hover:bg-surface-2">
+          All services
+        </a>
+      </div>
+    </section>
+    <VideoWork />
+    <ProcessTimeline />
+    <AboutTeaser />
+    <NotesTeaser />
+  </main>
+  <Footer />
 </Layout>

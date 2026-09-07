@@ -1,0 +1,109 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import WorkCard from "../../components/WorkCard.astro";
+import ProcessTimeline from "../../components/ProcessTimeline.astro";
+import { workCards } from "../../data/cases";
+import { cta } from "../../data/site";
+---
+
+<Layout title="Work, Md. Omar Ali" description="Case studies in data analysis, business analysis, presentation design, SEO, and video by Md. Omar Ali.">
+  <Nav />
+  <main class="mx-auto max-w-6xl px-5 py-14">
+    <p class="text-xs font-semibold uppercase tracking-widest text-ink-muted">Work</p>
+    <h1 class="display-lg mt-3 max-w-3xl">Outcomes, not just screenshots.</h1>
+    <p class="mt-4 max-w-2xl text-lg text-ink-muted">
+      Filter by craft. Every case opens on its own page with visuals, method, and outcomes.
+    </p>
+    <div class="mt-8 flex flex-wrap items-center gap-2" role="group" aria-label="Filter work">
+      <button data-filter="all" aria-pressed="true" class="work-filter rounded-full bg-ink px-4 py-2 text-sm font-medium text-canvas transition">
+        All <span class="opacity-60">{workCards.length}</span>
+      </button>
+      <button data-filter="analysis" aria-pressed="false" class="work-filter rounded-full bg-surface-1 px-4 py-2 text-sm font-medium text-ink-muted transition hover:text-ink">
+        Analysis <span class="opacity-60">{workCards.filter((c) => c.category === "analysis").length}</span>
+      </button>
+      <button data-filter="design" aria-pressed="false" class="work-filter rounded-full bg-surface-1 px-4 py-2 text-sm font-medium text-ink-muted transition hover:text-ink">
+        Design <span class="opacity-60">{workCards.filter((c) => c.category === "design").length}</span>
+      </button>
+      <p data-result-count class="w-full text-sm text-ink-muted" aria-live="polite">
+        Showing all {workCards.length} cases.
+      </p>
+    </div>
+    <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {workCards.map((c, i) => <WorkCard card={c} index={i} eager={i === 0} />)}
+    </div>
+
+    <ProcessTimeline secondary="about" />
+
+    <p class="mt-6 max-w-3xl text-sm text-ink-muted">
+      Confidentiality and legality: licensed fonts, stock, and data sources only. Academic
+      integrity respected, with guidance and editing, never ghostwritten submissions.
+    </p>
+
+    <div class="mt-12 flex flex-wrap gap-3">
+      <a href="/contact" class="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas">{cta.startBrief}</a>
+      <a href="/about" class="rounded-full bg-surface-1 px-5 py-2.5 text-sm font-medium text-ink">{cta.aboutOmar}</a>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  const buttons = document.querySelectorAll(".work-filter");
+  const cards = document.querySelectorAll(".work-card");
+  const count = document.querySelector("[data-result-count]");
+  const active = ["bg-ink", "text-canvas"];
+  const idle = ["bg-surface-1", "text-ink-muted"];
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const label = { all: "all", analysis: "analysis", design: "design" };
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const f = btn.getAttribute("data-filter");
+      buttons.forEach((b) => {
+        const isActive = b === btn;
+        b.setAttribute("aria-pressed", String(isActive));
+        b.classList.remove(...active);
+        b.classList.add(...idle);
+      });
+      btn.classList.remove(...idle);
+      btn.classList.add(...active);
+      let visible = 0;
+      cards.forEach((card) => {
+        const show = f === "all" || card.getAttribute("data-category") === f;
+        card.classList.toggle("hidden", !show);
+        if (show) {
+          visible += 1;
+          if (!reduceMotion) {
+            card.style.animation = "none";
+            void card.offsetWidth;
+            card.style.animation = "";
+            card.style.animationDelay = `${Math.min((visible - 1) * 40, 200)}ms`;
+          }
+        }
+      });
+      if (count) {
+        count.textContent =
+          f === "all"
+            ? `Showing all ${visible} cases.`
+            : `Showing ${visible} ${label[f] ?? f} cases.`;
+      }
+    });
+  });
+</script>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .work-card {
+      animation: work-card-in 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    }
+  }
+  @keyframes work-card-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+</style>

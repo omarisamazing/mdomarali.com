@@ -1,0 +1,194 @@
+---
+import { Image } from "astro:assets";
+import cutout from "../assets/transparent-omarali-headshot.webp";
+import Icon from "./Icon.astro";
+import { site, proofStats as miniProof } from "../data/site";
+
+const EMAIL = site.email;
+const ENDPOINT = "/api/brief";
+
+// Split hero: statement left, enquiry form right. DESIGN.md tokens —
+// canvas ground, display type, white pill primary, charcoal secondary,
+// inverse (always-white) form card. Grid is top-aligned so both columns
+// start on the same baseline.
+
+const subjects = [
+  "Data & business analysis",
+  "Presentation design",
+  "SEO & content",
+  "Video editing",
+  "Internship",
+  "Something else",
+];
+---
+
+<section id="top" class="mx-auto max-w-6xl px-5 pb-16 pt-12 md:pt-20">
+  <div class="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+    <div>
+      <div class="inline-flex items-center gap-2.5 rounded-full border border-hairline bg-surface-1 py-1.5 pl-1.5 pr-4 text-sm text-ink">
+        <Image
+          src={cutout}
+          alt="Md. Omar Ali"
+          width={112}
+          height={112}
+          quality="mid"
+          class="h-9 w-9 rounded-full border border-hairline-soft bg-surface-2 object-cover object-top"
+        />
+        <span class="inline-block h-2 w-2 rounded-full bg-success"></span>
+        Available for work
+        <a href="/contact" class="text-ink-muted underline-offset-2 hover:text-ink hover:underline">Get in touch now</a>
+      </div>
+
+      <h1 class="display-xxl mt-6">
+        Economist who turns messy data into winning decks.
+      </h1>
+
+      <p class="mt-6 max-w-xl text-lg leading-snug text-ink-muted">
+        I am <span class="font-semibold text-ink">Md. Omar Ali</span>, a third-year
+        Economics student from Bangladesh. I turn messy data into clear decisions,
+        and complex ideas into presentations, SEO content, and videos people remember.
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a
+          href="/work"
+          class="inline-flex items-center gap-1.5 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition hover:opacity-90"
+        >
+          View selected work
+          <Icon name="arrow" class="h-4 w-4" />
+        </a>
+        <a
+          href="#process"
+          class="rounded-full bg-surface-1 px-5 py-2.5 text-sm font-medium text-ink transition hover:bg-surface-2"
+        >
+          See how I work
+        </a>
+      </div>
+
+      <dl class="mt-10 flex flex-wrap gap-x-8 gap-y-4">
+        {
+          miniProof.map((s) => (
+            <div>
+              <dt class="sr-only">{s.label}</dt>
+              <dd class="display-md">{s.value}</dd>
+              <dd class="mt-0.5 text-xs font-medium uppercase tracking-widest text-ink-muted">{s.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    {/* Enquiry card: always white, both themes (inverse panel) */}
+    <div class="relative rounded-xxl border border-hairline bg-white p-7 text-black shadow-2xl md:p-8">
+      {/* Rotating badge overlapping the card corner */}
+      <a
+        href="/contact"
+        aria-label="Start a project"
+        class="absolute -top-9 right-6 hidden h-24 w-24 items-center justify-center rounded-full bg-ink text-canvas shadow-xl transition hover:scale-105 md:flex"
+      >
+        <svg viewBox="0 0 100 100" class="animate-spin-slow absolute inset-0 h-full w-full" aria-hidden="true">
+          <defs>
+            <path id="badge-circle" d="M 50,50 m -36,0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0" />
+          </defs>
+          <text font-size="10.5" letter-spacing="2.5" fill="currentColor" font-weight="600">
+            <textPath href="#badge-circle">START A PROJECT • START A PROJECT •</textPath>
+          </text>
+        </svg>
+        <Icon name="arrow" class="h-5 w-5" />
+      </a>
+      <form id="hero-form" class="space-y-4" novalidate>
+        <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off" />
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label for="hero-name" class="mb-1.5 block text-sm font-semibold">Name <span class="text-ink-muted">*</span></label>
+            <input
+              id="hero-name"
+              required
+              name="name"
+              placeholder="Enter full name"
+              autocomplete="name"
+              class="w-full rounded-md border border-black/10 bg-black/[0.03] px-4 py-2.5 text-[15px] text-black placeholder:text-black/40 focus:border-accent focus:outline-none"
+            />
+          </div>
+          <div>
+            <label for="hero-email" class="mb-1.5 block text-sm font-semibold">Email <span class="text-ink-muted">*</span></label>
+            <input
+              id="hero-email"
+              required
+              type="email"
+              name="email"
+              placeholder="Enter email"
+              autocomplete="email"
+              class="w-full rounded-md border border-black/10 bg-black/[0.03] px-4 py-2.5 text-[15px] text-black placeholder:text-black/40 focus:border-accent focus:outline-none"
+            />
+          </div>
+        </div>
+        <div>
+          <label for="hero-subject" class="mb-1.5 block text-sm font-semibold">Subject <span class="text-ink-muted">*</span></label>
+          <select
+            id="hero-subject"
+            required
+            name="subject"
+            class="w-full appearance-none rounded-md border border-black/10 bg-black/[0.03] px-4 py-2.5 text-[15px] text-black focus:border-accent focus:outline-none"
+          >
+            <option value="" selected>Select one</option>
+            {subjects.map((s) => <option>{s}</option>)}
+          </select>
+        </div>
+        <div>
+          <label for="hero-message" class="mb-1.5 block text-sm font-semibold">Message <span class="text-ink-muted">*</span></label>
+          <textarea
+            id="hero-message"
+            required
+            name="message"
+            rows="4"
+            placeholder="How can I help you?"
+            class="w-full rounded-md border border-black/10 bg-black/[0.03] px-4 py-2.5 text-[15px] text-black placeholder:text-black/40 focus:border-accent focus:outline-none"
+          ></textarea>
+        </div>
+        <button
+          data-submit
+          class="w-full rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-50 dark:bg-black dark:text-white"
+        >
+          Send brief
+        </button>
+        <p data-form-note class="text-center text-xs text-black/50">
+          Replies within 24 hours. Prefer email? <a href={`mailto:${EMAIL}`} class="underline">Email directly</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ endpoint: ENDPOINT, email: EMAIL }}>
+  const form = document.getElementById("hero-form");
+  const note = form?.querySelector("[data-form-note]");
+  const submit = form?.querySelector("[data-submit]");
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    if (data.get("_gotcha")) return;
+    const payload = Object.fromEntries(data.entries());
+    if (!payload.name || !payload.email || !payload.message || !payload.subject) {
+      if (note) note.textContent = "Please fill every required field.";
+      return;
+    }
+    submit?.setAttribute("disabled", "");
+    if (note) note.textContent = "Sending…";
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      if (note) note.textContent = "Enquiry received. Plan and quote within 24 hours.";
+      form.reset();
+    } catch {
+      window.location.href = `mailto:${email}?subject=${encodeURIComponent("Enquiry from " + (payload.name || ""))}&body=${encodeURIComponent(String(payload.message || ""))}`;
+    } finally {
+      submit?.removeAttribute("disabled");
+    }
+  });
+</script>

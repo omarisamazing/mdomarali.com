@@ -1,0 +1,83 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  teaser?: boolean;
+}
+
+const { teaser = false } = Astro.props;
+
+const services = [
+  {
+    icon: "chart" as const,
+    title: "Data Analysis",
+    desc: "Clean datasets, dashboards, and one-page insight briefs your manager can act on.",
+    tags: ["Excel", "Python", "Power BI", "Insight memos"],
+    featured: true,
+  },
+  {
+    icon: "flow" as const,
+    title: "Business Analysis",
+    desc: "Problem framing, requirements, KPIs, and process maps for econ and ops projects.",
+    tags: ["BRD", "KPIs", "User stories", "Process maps"],
+    featured: false,
+  },
+  {
+    icon: "slides" as const,
+    title: "Presentation Design",
+    desc: "Investor, thesis, and sales decks: narrative, layout, charts, and templates.",
+    tags: ["PowerPoint", "Pitch decks", "Chart systems"],
+    featured: false,
+  },
+  {
+    icon: "search" as const,
+    title: "SEO and Content",
+    desc: "Keyword maps, briefs, and optimized articles that compound over time.",
+    tags: ["Keyword research", "On-page", "Briefs"],
+    featured: false,
+  },
+  {
+    icon: "video" as const,
+    title: "Graphics and Video",
+    desc: "Thumbnails, social cuts, and clean edits that keep attention to the end.",
+    tags: ["Premiere", "Thumbnails", "Captions"],
+    featured: false,
+  },
+  {
+    icon: "check" as const,
+    title: "Research Assistance",
+    desc: "Lit reviews, data collection, and survey analysis for econ coursework.",
+    tags: ["Surveys", "Cleaning logs", "Citations"],
+    featured: false,
+  },
+];
+
+const shown = teaser ? services.slice(0, 3) : services;
+---
+
+<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+  {
+    shown.map((s) => (
+      <article
+        class={`rounded-xl border p-6 ${s.featured ? "border-hairline bg-surface-2" : "border-hairline-soft bg-surface-1"}`}
+      >
+        <span class={`inline-flex h-10 w-10 items-center justify-center rounded-full ${s.featured ? "bg-ink text-canvas" : "bg-surface-2 text-ink"}`}>
+          <Icon name={s.icon} />
+        </span>
+        <h3 class="mt-4 text-xl font-semibold tracking-tight">{s.title}</h3>
+        <p class={`mt-2 text-[15px] leading-snug ${s.featured ? "text-ink" : "text-ink-muted"}`}>
+          {s.desc}
+        </p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {s.tags.map((t) => (
+            <span
+              class={`rounded-full px-3 py-1 text-xs font-medium ${s.featured ? "bg-surface-1 text-ink" : "bg-surface-2 text-ink"}`}
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      </article>
+    ))
+  }
+</div>

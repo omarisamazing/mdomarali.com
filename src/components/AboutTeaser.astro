@@ -1,0 +1,89 @@
+---
+import { Image } from "astro:assets";
+import cutout from "../assets/transparent-omarali-headshot.webp";
+import Icon from "./Icon.astro";
+import { site, proofStats as stats } from "../data/site";
+
+// About teaser: "who am I" chip, person-first copy, portrait card with a
+// glass proof overlay. Destinations are all functional: email, WhatsApp, Cal.
+const EMAIL = site.email;
+const WHATSAPP = site.whatsapp; // TODO: real number
+const CAL_LINK = site.calLink; // TODO: real event link
+---
+
+<section class="mx-auto max-w-6xl px-5 py-24">
+  <div class="grid items-start gap-10 lg:grid-cols-2 lg:gap-14">
+    <div>
+      <p class="inline-flex items-center gap-1.5 rounded-full bg-surface-1 px-3.5 py-1.5 text-xs font-semibold text-ink">
+        <span class="inline-block h-1.5 w-1.5 rounded-full bg-accent"></span>
+        Who am I?
+      </p>
+      <h2 class="display-lg mt-4">Meet Md. Omar Ali, analyst in training, designer by craft.</h2>
+      <p class="mt-5 leading-relaxed text-ink-muted">
+        Third-year Economics student from Bangladesh, building an analyst profile the
+        verifiable way: public data, documented method, and artifacts a team can reuse.
+        Alongside coursework I ship presentation design, SEO content, and video work.
+      </p>
+      <p class="mt-4 leading-relaxed text-ink-muted">
+        Currently preparing for IELTS and learning Deutsch (A2 to B1), because the roles
+        I am targeting are remote-first and international.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-2">
+        <a
+          href={`mailto:${EMAIL}`}
+          class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-surface-1 text-ink transition hover:bg-surface-2"
+          aria-label="Email Omar"
+        >
+          <Icon name="mail" />
+        </a>
+        <a
+          href={WHATSAPP}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-surface-1 text-ink transition hover:bg-surface-2"
+          aria-label="WhatsApp Omar"
+        >
+          <Icon name="chat" />
+        </a>
+        <a
+          href={CAL_LINK}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex h-10 items-center gap-2 rounded-full bg-ink px-5 text-sm font-medium text-canvas transition hover:opacity-90"
+        >
+          <Icon name="calendar" class="h-4 w-4" />
+          Book a call
+        </a>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+        <span class="absolute left-1/2 top-8 h-72 w-72 -translate-x-1/2 rounded-full bg-gradient-violet opacity-15 blur-[100px] dark:opacity-25"></span>
+        <span class="absolute bottom-0 right-4 h-56 w-56 rounded-full bg-gradient-magenta opacity-10 blur-[100px] dark:opacity-15"></span>
+      </div>
+      <div class="relative">
+        <Image
+          src={cutout}
+          alt="Md. Omar Ali in a black suit"
+          widths={[480, 800]}
+          sizes="(max-width: 1024px) 100vw, 560px"
+          quality="high"
+          class="relative w-full [mask-image:radial-gradient(ellipse_80%_85%_at_50%_42%,black_62%,transparent_98%)] dark:drop-shadow-[0_36px_60px_rgba(24,104,219,0.32)]"
+        />
+        <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-canvas to-transparent"></div>
+      </div>
+      <dl class="relative mt-2 grid grid-cols-3 gap-2 border-t border-hairline-soft pt-5">
+        {
+          stats.map((s) => (
+            <div>
+              <dt class="sr-only">{s.label}</dt>
+              <dd class="display-md">{s.value}</dd>
+              <dd class="mt-0.5 text-[11px] font-medium uppercase tracking-widest text-ink-muted">{s.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>

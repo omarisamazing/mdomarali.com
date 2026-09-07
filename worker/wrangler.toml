@@ -1,0 +1,7 @@
+name = "mdomarali-brief"
+main = "brief.ts"
+compatibility_date = "2026-09-01"
+
+# After deploy, add a route so the Astro site can POST to /api/brief:
+# Cloudflare dashboard → Workers & Pages → this worker → Settings → Domains & Routes
+# → Add route: mdomarali.com/api/brief

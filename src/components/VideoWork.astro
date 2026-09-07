@@ -1,0 +1,41 @@
+---
+import { cases } from "../data/cases";
+
+// Compact strip of real video work. Muted first-frame previews link
+// to the full case pages. No stock, no placeholders.
+const videos = cases.filter((c) => c.videos.length > 0);
+---
+
+<section class="mx-auto max-w-6xl px-5 py-24">
+  <p class="text-xs font-semibold uppercase tracking-widest text-ink-muted">Video</p>
+  <h2 class="display-lg mt-3 max-w-3xl">Watch the work move.</h2>
+  <p class="mt-4 max-w-2xl text-lg text-ink-muted">
+    Product tours and release cuts, captioned for silent viewing.
+  </p>
+  <div class="mt-10 grid gap-4 md:grid-cols-2">
+    {videos.map((v) => (
+      <a
+        href={`/work/${v.slug}`}
+        class="group block overflow-hidden rounded-xl border border-hairline-soft bg-surface-1 transition duration-200 ease-out motion-reduce:transform-none hover:-translate-y-1 hover:bg-surface-2"
+      >
+        <video
+          src={v.videos[0].src}
+          preload="metadata"
+          muted
+          loop
+          playsinline
+          disablepictureinpicture
+          data-hover-play
+          aria-hidden="true"
+          class="aspect-video w-full object-cover"
+        />
+        <span class="block p-6">
+          <span class="text-xs font-semibold uppercase tracking-widest text-ink-muted">{v.eyebrow}</span>
+          <span class="mt-2 block text-xl font-semibold tracking-tight">{v.title}</span>
+          <span class="mt-1 block text-sm text-ink-muted">{v.outcome}</span>
+          <span class="mt-3 block text-sm font-medium text-accent">Watch the case →</span>
+        </span>
+      </a>
+    ))}
+  </div>
+</section>

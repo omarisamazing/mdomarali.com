@@ -1,0 +1,193 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Icon from "../components/Icon.astro";
+import { site } from "../data/site";
+
+// TODO: replace with real links
+const CAL_LINK = site.calLink;
+const WHATSAPP = site.whatsapp;
+const EMAIL = site.email;
+// The brief form POSTs here. Deploy worker/brief.ts on Cloudflare Workers
+// and route /api/brief to it (see worker/wrangler.toml).
+const BRIEF_ENDPOINT = "/api/brief";
+
+const faqs = [
+  { q: "Are you open to full-time roles?", a: "Yes: analyst internships, research assistant roles, and junior data or business analyst tracks. I reply within 24 hours with availability, CV, and references." },
+  { q: "What tools do you actually use?", a: "Excel and Sheets, Python (pandas), Power BI, PowerPoint, Premiere and CapCut, plus SEO tooling. Every project lists its stack so you can verify." },
+  { q: "How fast can you deliver a deck or analysis?", a: "Small decks in 48 to 72 hours, standard cases in 5 to 7 days. Deadlines go in writing before we start." },
+  { q: "How does the paid trial work?", a: "A fixed 2-hour task — one chart, slide, or brief — delivered in 48 hours. If it fits, we roll the learnings into the full project." },
+  { q: "How is pricing set?", a: "Fixed quote before we start, based on goal, deadline, and scope. No hourly surprises; revisions tied to the agreed plan." },
+  { q: "Do you sign NDAs and respect academic integrity?", a: "Yes. NDA on request, licensed assets only, and tutoring plus editing support, never contract cheating." },
+  { q: "How do we start?", a: "Book an intro call, or send the brief with goal, deadline, and budget. You get a fixed quote and a plan in one message." },
+];
+
+const paths = [
+  { icon: "calendar" as const, t: "15-min intro call", d: "Fit check on Cal.com, no commitment", href: CAL_LINK },
+  { icon: "check" as const, t: "Paid 2-hour trial task", d: "Small paid test before a project", href: "#brief" },
+  { icon: "slides" as const, t: "Fixed-scope project", d: "Quote plus deadline in writing", href: "#brief" },
+];
+---
+
+<Layout title="Contact, Md. Omar Ali" description="Hire Md. Omar Ali for data analysis, business analysis, presentation design, SEO, or video work. Book on Cal.com or send a brief. Replies within 24 hours.">
+  <Nav />
+  <main class="mx-auto max-w-6xl px-5 py-14">
+    <p class="text-xs font-semibold uppercase tracking-widest text-ink-muted">Contact</p>
+    <h1 class="display-lg mt-3 max-w-2xl">Tell me the goal. You get a plan and a fixed quote.</h1>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a
+        href={CAL_LINK}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition hover:opacity-90"
+      >
+        <Icon name="calendar" class="h-4 w-4" />
+        Book on Cal.com
+      </a>
+      <a
+        href={WHATSAPP}
+        target="_blank"
+        rel="noopener"
+        class="rounded-full bg-surface-1 px-5 py-2.5 text-sm font-medium text-ink transition hover:bg-surface-2"
+      >
+        WhatsApp
+      </a>
+    </div>
+
+    <div id="brief" class="mt-10 rounded-xxl border border-hairline-soft bg-surface-1 p-8 md:p-12">
+      <div class="grid gap-8 md:grid-cols-2">
+        <form id="brief-form" class="space-y-3" novalidate>
+          <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off" />
+          <input
+            required
+            name="name"
+            placeholder="Your name"
+            autocomplete="name"
+            class="w-full rounded-md border border-hairline bg-canvas px-4 py-2.5 text-[15px] text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none"
+          />
+          <input
+            required
+            type="email"
+            name="email"
+            placeholder="Work email"
+            autocomplete="email"
+            class="w-full rounded-md border border-hairline bg-canvas px-4 py-2.5 text-[15px] text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none"
+          />
+          <div class="grid grid-cols-2 gap-3">
+            <input
+              name="budget"
+              placeholder="Budget (USD)"
+              class="w-full rounded-md border border-hairline bg-canvas px-4 py-2.5 text-[15px] text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none"
+            />
+            <input
+              name="deadline"
+              placeholder="Deadline"
+              class="w-full rounded-md border border-hairline bg-canvas px-4 py-2.5 text-[15px] text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none"
+            />
+          </div>
+          <textarea
+            required
+            name="message"
+            rows="4"
+            placeholder="Project: goal, audience, files or links"
+            class="w-full rounded-md border border-hairline bg-canvas px-4 py-2.5 text-[15px] text-ink placeholder:text-ink-muted focus:border-accent focus:outline-none"
+          ></textarea>
+          <button
+            data-submit
+            class="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition hover:opacity-90 disabled:opacity-50"
+          >
+            Send brief
+          </button>
+          <p data-form-note class="text-xs text-ink-muted">
+            By sending, you agree to be contacted about this project. NDA available.
+          </p>
+          <p class="text-xs text-ink-muted">
+            Prefer email? <a href={`mailto:${EMAIL}?subject=Project brief`} class="underline hover:text-ink">{EMAIL}</a>
+          </p>
+        </form>
+        <div class="space-y-4 text-[15px]">
+          <div class="rounded-xl bg-surface-2 p-5">
+            <p class="font-semibold">Direct</p>
+            <p class="mt-1 text-ink-muted">{EMAIL}</p>
+            <p class="text-ink-muted">Dhaka, Bangladesh, remote worldwide</p>
+            <p class="mt-2 text-ink-muted">Replies within 24 hours.</p>
+          </div>
+          <div class="space-y-3">
+            {
+              paths.map((p) => (
+                <a href={p.href} class="flex items-center gap-3 rounded-xl bg-surface-2 p-4 transition hover:bg-surface-1">
+                  <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-1 text-ink">
+                    <Icon name={p.icon} />
+                  </span>
+                  <span>
+                    <span class="block font-semibold">{p.t}</span>
+                    <span class="block text-sm text-ink-muted">{p.d}</span>
+                  </span>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="mt-20 max-w-4xl">
+      <p class="text-xs font-semibold uppercase tracking-widest text-ink-muted">Employer FAQ</p>
+      <h2 class="display-md mt-3">Asked before you ask.</h2>
+      <div class="mt-8 divide-y divide-hairline-soft border-y border-hairline-soft">
+        {
+          faqs.map((f) => (
+            <details class="group py-5">
+              <summary class="cursor-pointer list-none text-[15px] font-medium text-ink [&::-webkit-details-marker]:hidden">
+                {f.q}
+                <span class="float-right text-ink-muted transition group-open:rotate-45">+</span>
+              </summary>
+              <p class="mt-2 max-w-3xl text-[15px] leading-relaxed text-ink-muted">{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<script define:vars={{ endpoint: BRIEF_ENDPOINT, email: EMAIL }}>
+  const form = document.getElementById("brief-form");
+  const note = document.querySelector("[data-form-note]");
+  const submit = document.querySelector("[data-submit]");
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    if (data.get("_gotcha")) return; // honeypot
+    const payload = Object.fromEntries(data.entries());
+    if (!payload.name || !payload.email || !payload.message) {
+      if (note) note.textContent = "Please fill name, email, and project details.";
+      return;
+    }
+    submit?.setAttribute("disabled", "");
+    if (note) note.textContent = "Sending…";
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      if (note) note.textContent = "Brief received. You get a plan and quote within 24 hours.";
+      form.reset();
+    } catch {
+      if (note)
+        note.textContent = "Send failed. Email your brief directly instead.";
+      const fallback = document.createElement("a");
+      fallback.href = `mailto:${email}?subject=${encodeURIComponent("Project brief from " + (payload.name || ""))}&body=${encodeURIComponent(String(payload.message || ""))}`;
+      fallback.textContent = "Email the brief";
+      fallback.className = "mt-2 inline-block underline";
+      note?.after(fallback);
+    } finally {
+      submit?.removeAttribute("disabled");
+    }
+  });
+</script>

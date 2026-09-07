@@ -1,0 +1,21 @@
+---
+import { workCards } from "../data/cases";
+import { cta } from "../data/site";
+import WorkCard from "./WorkCard.astro";
+
+const featured = workCards.filter((c) => c.featured);
+---
+
+<section class="mx-auto max-w-6xl px-5 py-24">
+  <p class="text-xs font-semibold uppercase tracking-widest text-ink-muted">Selected work</p>
+  <h2 class="display-lg mt-3 max-w-3xl">The work, up front.</h2>
+  <p class="mt-4 max-w-2xl text-lg text-ink-muted">
+    Featured {featured.length} of {workCards.length} total cases. Each opens with visuals, method, and outcome.
+  </p>
+  <div class="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    {featured.map((c, i) => <WorkCard card={c} index={i} eager={i === 0} />)}
+  </div>
+  <a href="/work" class="mt-8 inline-block rounded-full bg-surface-1 px-5 py-2.5 text-sm font-medium text-ink transition hover:bg-surface-2">
+    {cta.allWork} →
+  </a>
+</section>

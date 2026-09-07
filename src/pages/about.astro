@@ -1,0 +1,92 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import ServicesGrid from "../components/ServicesGrid.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { Image } from "astro:assets";
+import profile from "../assets/transparent-omarali-headshot.webp";
+import { notes } from "../data/notes";
+---
+
+<Layout title="About, Md. Omar Ali" description="About Md. Omar Ali: third-year Economics student, aspiring data and business analyst, presentation designer, currently preparing for IELTS and learning German.">
+  <Nav />
+  <main class="mx-auto max-w-6xl px-5 py-14">
+    <div class="grid gap-10 md:grid-cols-[1.2fr_1fr]">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-widest text-ink-muted">About</p>
+        <h1 class="display-lg mt-3">Economics student, building an analyst profile.</h1>
+        <p class="mt-4 text-lg leading-snug text-ink-muted">
+          Third-year Bachelor of Economics, Bangladesh. Exploring data analysis,
+          business analysis, and applied econ projects, while shipping SEO,
+          presentation design, and video work to fund the journey.
+        </p>
+        <ul class="mt-6 space-y-3 text-[15px] text-ink-muted">
+          <li><span class="font-semibold text-ink">Now:</span> Excel to Python to dashboards, plus econometrics coursework projects</li>
+          <li><span class="font-semibold text-ink">Also:</span> IELTS prep plus Deutsch (target: exam-ready, A2 to B1)</li>
+          <li><span class="font-semibold text-ink">Open to:</span> data intern, research assistant, presentation and SEO freelance</li>
+        </ul>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="/cv-omar-ali.pdf" class="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas">Download CV (PDF)</a>
+          <a href="/contact" class="rounded-full bg-surface-1 px-5 py-2.5 text-sm font-medium text-ink">Get in touch</a>
+        </div>
+      </div>
+      <div class="relative">
+        <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+          <span class="absolute left-1/2 top-8 h-64 w-64 -translate-x-1/2 rounded-full bg-gradient-violet opacity-15 blur-[100px] dark:opacity-25"></span>
+          <span class="absolute bottom-0 right-4 h-48 w-48 rounded-full bg-gradient-magenta opacity-10 blur-[100px] dark:opacity-15"></span>
+        </div>
+        <div class="relative">
+          <Image
+            src={profile}
+            alt="Md. Omar Ali in a black suit"
+            widths={[480, 800]}
+            sizes="(max-width: 768px) 100vw, 400px"
+            quality="high"
+            class="relative w-full [mask-image:radial-gradient(ellipse_80%_85%_at_50%_42%,black_62%,transparent_98%)] dark:drop-shadow-[0_36px_60px_rgba(24,104,219,0.32)]"
+          />
+          <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-canvas to-transparent"></div>
+        </div>
+      </div>
+    </div>
+
+    <section id="services" class="mt-24">
+      <p class="text-xs font-semibold uppercase tracking-widest text-ink-muted">Services</p>
+      <h2 class="display-md mt-3 max-w-2xl">One hire, three outcomes: insight, narrative, and delivery.</h2>
+      <div class="mt-8">
+        <ServicesGrid />
+      </div>
+    </section>
+
+    <section class="mt-24 grid gap-10 md:grid-cols-2">
+      <div class="rounded-xxl border border-hairline-soft bg-surface-1 p-8">
+        <h2 class="text-2xl font-semibold tracking-tight">Learning in public</h2>
+        <ul class="mt-4 space-y-3 text-[15px] text-ink-muted">
+          <li>Weekly econ and data notes (what broke, what I fixed)</li>
+          <li>IELTS writing samples with band self-reviews</li>
+          <li>Deutsch vocabulary logs plus presentation vocab</li>
+          <li>Before and after deck teardowns</li>
+        </ul>
+        <p class="mt-5 text-sm text-ink-muted">Employers hire trajectory. This feed proves mine.</p>
+      </div>
+      <div id="notes">
+        <p class="text-xs font-semibold uppercase tracking-widest text-ink-muted">Notes and resources</p>
+        <h2 class="display-md mt-3">Steal my checklists.</h2>
+        <div class="mt-6 space-y-3">
+          {
+            notes.map((p) => (
+              <a href="/contact" class="group block rounded-xl border border-hairline-soft bg-surface-1 p-5 transition hover:bg-surface-2">
+                <span class="rounded-full bg-surface-2 px-3 py-1 text-xs font-medium text-ink">{p.tag}</span>
+                <span class="mt-2 block font-semibold tracking-tight">{p.title}</span>
+                <span class="mt-1 block text-sm text-ink-muted">{p.meta}</span>
+                <span class="mt-2 block text-sm font-medium text-accent">Request free →</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+  <CtaBand />
+  <Footer />
+</Layout>
