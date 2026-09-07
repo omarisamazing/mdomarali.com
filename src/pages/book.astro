@@ -105,13 +105,16 @@ const EMAIL = site.email;
   try {
     // Placeholder styles live on :empty, so they vanish the moment Cal
     // appends its iframe — no JS cleanup needed.
-    Cal("init", { origin: "https://app.cal.com" });
-    // Dark-blend the iframe's outer canvas + Cal.com footer bar via the
-    // supported theming API (cross-origin iframe, so no direct CSS access).
-    // Branding text itself is kept; only its background blends with the site.
-    Cal("ui", {
+    //
+    // The white surround was an opaque iframe canvas from a color-scheme
+    // mismatch: Cal only forwards its auto-detected scheme when the host
+    // computes to exactly "dark"/"light", but our `color-scheme: dark light`
+    // doesn't. So pass it explicitly — matching schemes give a transparent
+    // canvas and our dark wrapper shows through. Branding text is kept.
+    const scheme = () => (document.documentElement.classList.contains("dark") ? "dark" : "light");
+    const uiConfig = () => ({
       theme: "auto",
-      layout: "month_view",
+      colorScheme: scheme(),
       cssVarsPerTheme: {
         light: {
           "cal-bg": "#ffffff",
@@ -130,11 +133,20 @@ const EMAIL = site.email;
         },
       },
     });
+    Cal("init", { origin: "https://app.cal.com" });
     Cal("inline", {
       elementOrSelector: "#book-cal",
       calLink: calPath,
-      config: { layout: "month_view", theme: "auto" },
+      config: { layout: "month_view", theme: "auto", "ui.color-scheme": scheme() },
     });
+    Cal("ui", uiConfig());
+    // The URL param only applies at iframe creation, so re-send the ui
+    // config when the site light/dark toggle flips the <html> class.
+    new MutationObserver(() => {
+      try {
+        Cal("ui", uiConfig());
+      } catch {}
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
   } catch (e) {
     /* Embed blocked (e.g. adblocker) — fallback links above cover booking. */
   }
