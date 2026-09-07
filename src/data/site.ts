@@ -4,8 +4,8 @@ export const site = {
   url: "https://mdomarali.com",
   name: "Md. Omar Ali",
   email: "hello@mdomarali.com",
-  calLink: "https://cal.com/mdomarali/intro", // TODO: real event link
-  whatsapp: "https://wa.me/8801XXXXXXXXX", // TODO: real number
+  calLink: "https://cal.com/mdomarali.com/15min",
+  whatsapp: "https://wa.me/8801856733357",
   location: "Dhaka, Bangladesh, remote worldwide",
 } as const;
 
