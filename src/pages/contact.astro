@@ -5,7 +5,6 @@ import Footer from "../components/Footer.astro";
 import Icon from "../components/Icon.astro";
 import { site } from "../data/site";
 
-const CAL_LINK = site.calLink;
 const WHATSAPP = site.whatsapp;
 const EMAIL = site.email;
 // The brief form POSTs here. Deploy worker/brief.ts on Cloudflare Workers
@@ -23,7 +22,7 @@ const faqs = [
 ];
 
 const paths = [
-  { icon: "calendar" as const, t: "15-min intro call", d: "Fit check on Cal.com, no commitment", href: CAL_LINK },
+  { icon: "calendar" as const, t: "15-min intro call", d: "Fit check, no commitment", href: "/book" },
   { icon: "check" as const, t: "Paid 2-hour trial task", d: "Small paid test before a project", href: "#brief" },
   { icon: "slides" as const, t: "Fixed-scope project", d: "Quote plus deadline in writing", href: "#brief" },
 ];
@@ -36,13 +35,11 @@ const paths = [
     <h1 class="display-lg mt-3 max-w-2xl">Tell me the goal. You get a plan and a fixed quote.</h1>
     <div class="mt-6 flex flex-wrap gap-3">
       <a
-        href={CAL_LINK}
-        target="_blank"
-        rel="noopener"
+        href="/book"
         class="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition hover:opacity-90"
       >
         <Icon name="calendar" class="h-4 w-4" />
-        Book on Cal.com
+        Book a call
       </a>
       <a
         href={WHATSAPP}

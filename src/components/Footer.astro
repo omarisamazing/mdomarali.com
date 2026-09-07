@@ -4,9 +4,6 @@ import iconWhite from "../assets/Logos/omarali-logo-icon-white.svg";
 import iconBlack from "../assets/Logos/omarali-logo-icon-black.svg";
 import wordmarkBrand from "../assets/Logos/omarali-wordmark-brand.svg";
 import Icon from "./Icon.astro";
-import { site } from "../data/site";
-
-const CAL_LINK = site.calLink;
 ---
 
 <footer class="border-t border-hairline-soft">
@@ -14,9 +11,7 @@ const CAL_LINK = site.calLink;
     <div>
       <h2 class="display-md max-w-xs">Got a project in mind?</h2>
       <a
-        href={CAL_LINK}
-        target="_blank"
-        rel="noopener"
+        href="/book"
         class="mt-6 inline-flex items-center gap-1.5 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition hover:opacity-90"
       >
         Schedule a call
@@ -30,7 +25,7 @@ const CAL_LINK = site.calLink;
         <li><a href="/about" class="hover:text-ink-muted">About me</a></li>
         <li><a href="/work" class="hover:text-ink-muted">Work</a></li>
         <li><a href="/contact" class="hover:text-ink-muted">Contact</a></li>
-        <li><a href={CAL_LINK} target="_blank" rel="noopener" class="hover:text-ink-muted">Book a call</a></li>
+        <li><a href="/book" class="hover:text-ink-muted">Book a call</a></li>
       </ul>
     </nav>
     <nav class="text-[13px]" aria-label="Resources">

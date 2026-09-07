@@ -33,12 +33,19 @@ const schema = {
 <html lang="en" class="dark">
   <head>
     <meta charset="utf-8" />
+    <meta name="theme-color" id="theme-color-meta" content="#090909" />
     <script is:inline>
       try {
-        if (localStorage.theme === "light") document.documentElement.classList.remove("dark");
+        if (localStorage.theme === "light") {
+          document.documentElement.classList.remove("dark");
+          document
+            .querySelector('meta[name="theme-color"]')
+            ?.setAttribute("content", "#ffffff");
+        }
       } catch (e) {}
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style is:inline>html{color-scheme:dark light}</style>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
@@ -60,9 +67,7 @@ const schema = {
     <slot />
     {/* Floating call widget, site-wide. */}
     <a
-      href={site.calLink}
-      target="_blank"
-      rel="noopener"
+      href="/book"
       class="fixed bottom-5 right-5 z-40 flex items-center gap-3 rounded-full border border-hairline-soft bg-surface-1/90 py-2 pl-2 pr-5 shadow-xl backdrop-blur transition hover:bg-surface-2"
     >
       <span class="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-canvas">
@@ -72,7 +77,7 @@ const schema = {
       </span>
       <span class="leading-tight">
         <span class="block text-sm font-semibold">Book a Call</span>
-        <span class="block text-xs text-ink-muted">No commitment</span>
+        <span class="hidden text-xs text-ink-muted sm:block">No commitment</span>
       </span>
     </a>
     <script is:inline>

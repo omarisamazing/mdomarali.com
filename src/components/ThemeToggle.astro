@@ -5,7 +5,7 @@
   id="theme-toggle"
   type="button"
   aria-label="Toggle light and dark mode"
-  class="flex h-10 w-10 items-center justify-center rounded-full bg-surface-1 text-ink transition hover:bg-surface-2"
+  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-1 text-ink transition hover:bg-surface-2 sm:h-10 sm:w-10"
 >
   <svg class="hidden h-5 w-5 dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
     <circle cx="12" cy="12" r="4" />
@@ -23,5 +23,8 @@
     try {
       localStorage.theme = dark ? "dark" : "light";
     } catch (e) {}
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", dark ? "#090909" : "#ffffff");
   });
 </script>
