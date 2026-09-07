@@ -29,7 +29,7 @@ const EMAIL = site.email;
       </p>
     </div>
 
-    <div class="mx-auto mt-10 max-w-4xl overflow-hidden rounded-xxl border border-hairline-soft">
+    <div class="mx-auto mt-10 max-w-4xl overflow-hidden rounded-xxl border border-hairline-soft bg-canvas">
       <div id="book-cal" class="book-cal-empty"></div>
     </div>
 
@@ -106,6 +106,30 @@ const EMAIL = site.email;
     // Placeholder styles live on :empty, so they vanish the moment Cal
     // appends its iframe — no JS cleanup needed.
     Cal("init", { origin: "https://app.cal.com" });
+    // Dark-blend the iframe's outer canvas + Cal.com footer bar via the
+    // supported theming API (cross-origin iframe, so no direct CSS access).
+    // Branding text itself is kept; only its background blends with the site.
+    Cal("ui", {
+      theme: "auto",
+      layout: "month_view",
+      cssVarsPerTheme: {
+        light: {
+          "cal-bg": "#ffffff",
+          "cal-bg-emphasis": "#f4f4f4",
+          "cal-border-booker": "#e6e6e6",
+          "cal-border-booker-width": "0px",
+          radius: "30px",
+        },
+        dark: {
+          "cal-bg": "#090909",
+          "cal-bg-emphasis": "#141414",
+          "cal-bg-subtle": "#141414",
+          "cal-border-booker": "#1a1a1a",
+          "cal-border-booker-width": "0px",
+          radius: "30px",
+        },
+      },
+    });
     Cal("inline", {
       elementOrSelector: "#book-cal",
       calLink: calPath,
