@@ -8,6 +8,13 @@ import { site, proofStats as stats } from "../data/site";
 // glass proof overlay. Destinations are all functional: email, WhatsApp, Cal.
 const EMAIL = site.email;
 const WHATSAPP = site.whatsapp;
+
+// Split "15+" -> { target: 15, suffix: "+" } so the count-up script can
+// animate the number while keeping the suffix static.
+const parseStat = (value: string) => {
+  const m = value.match(/^(\d+)(.*)$/);
+  return { target: m ? Number(m[1]) : 0, suffix: m ? m[2] : "" };
+};
 ---
 
 <section class="mx-auto max-w-6xl px-5 py-24">
@@ -74,15 +81,64 @@ const WHATSAPP = site.whatsapp;
       </div>
       <dl class="relative mt-2 grid grid-cols-3 gap-2 border-t border-hairline-soft pt-5">
         {
-          stats.map((s) => (
-            <div>
-              <dt class="sr-only">{s.label}</dt>
-              <dd class="display-md">{s.value}</dd>
-              <dd class="mt-0.5 text-[11px] font-medium uppercase tracking-widest text-ink-muted">{s.label}</dd>
-            </div>
-          ))
+          stats.map((s) => {
+            const { target, suffix } = parseStat(s.value);
+            return (
+              <div>
+                <dt class="sr-only">{s.label}</dt>
+                <dd class="display-md tabular-nums" data-countup data-target={target} data-suffix={suffix}>
+                  {s.value}
+                </dd>
+                <dd class="mt-0.5 text-[11px] font-medium uppercase tracking-widest text-ink-muted">{s.label}</dd>
+              </div>
+            );
+          })
         }
       </dl>
     </div>
   </div>
 </section>
+
+<script is:inline>
+  (() => {
+    try {
+      const els = document.querySelectorAll("[data-countup]");
+      if (!els.length) return;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const animate = (el) => {
+        const target = Number(el.dataset.target || "0");
+        const suffix = el.dataset.suffix || "";
+        if (reduceMotion || !Number.isFinite(target)) {
+          el.textContent = `${target}${suffix}`;
+          return;
+        }
+        const duration = 1200;
+        let start;
+        const step = (t) => {
+          if (start === undefined) start = t;
+          const p = Math.min((t - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = `${Math.round(target * eased)}${suffix}`;
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              animate(entry.target);
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.4 }
+      );
+      els.forEach((el) => {
+        if (el.dataset.countupBound) return;
+        el.dataset.countupBound = "true";
+        io.observe(el);
+      });
+    } catch {}
+  })();
+</script>

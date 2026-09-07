@@ -20,6 +20,12 @@ const subjects = [
   "Internship",
   "Something else",
 ];
+
+// Split "15+" -> { target: 15, suffix: "+" } for the count-up animation.
+const parseStat = (value: string) => {
+  const m = value.match(/^(\d+)(.*)$/);
+  return { target: m ? Number(m[1]) : 0, suffix: m ? m[2] : "" };
+};
 ---
 
 <section id="top" class="mx-auto max-w-6xl px-5 pb-16 pt-12 md:pt-20">
@@ -67,13 +73,18 @@ const subjects = [
 
       <dl class="mt-10 flex flex-wrap gap-x-8 gap-y-4">
         {
-          miniProof.map((s) => (
-            <div>
-              <dt class="sr-only">{s.label}</dt>
-              <dd class="display-md">{s.value}</dd>
-              <dd class="mt-0.5 text-xs font-medium uppercase tracking-widest text-ink-muted">{s.label}</dd>
-            </div>
-          ))
+          miniProof.map((s) => {
+            const { target, suffix } = parseStat(s.value);
+            return (
+              <div>
+                <dt class="sr-only">{s.label}</dt>
+                <dd class="display-md tabular-nums" data-countup data-target={target} data-suffix={suffix}>
+                  {s.value}
+                </dd>
+                <dd class="mt-0.5 text-xs font-medium uppercase tracking-widest text-ink-muted">{s.label}</dd>
+              </div>
+            );
+          })
         }
       </dl>
     </div>
@@ -159,6 +170,52 @@ const subjects = [
     </div>
   </div>
 </section>
+
+<script is:inline>
+  // Shared count-up for all [data-countup] stats (Hero + AboutTeaser).
+  // Guarded so multiple component instances on one page don't double-bind.
+  (() => {
+    try {
+      const els = document.querySelectorAll("[data-countup]");
+      if (!els.length) return;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const animate = (el) => {
+        const target = Number(el.dataset.target || "0");
+        const suffix = el.dataset.suffix || "";
+        if (reduceMotion || !Number.isFinite(target)) {
+          el.textContent = `${target}${suffix}`;
+          return;
+        }
+        const duration = 1200;
+        let start;
+        const step = (t) => {
+          if (start === undefined) start = t;
+          const p = Math.min((t - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = `${Math.round(target * eased)}${suffix}`;
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              animate(entry.target);
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.4 }
+      );
+      els.forEach((el) => {
+        if (el.dataset.countupBound) return;
+        el.dataset.countupBound = "true";
+        io.observe(el);
+      });
+    } catch {}
+  })();
+</script>
 
 <script define:vars={{ endpoint: ENDPOINT, email: EMAIL }}>
   const form = document.getElementById("hero-form");
