@@ -33,20 +33,17 @@ import { notes } from "../data/notes";
       </div>
       <div class="relative">
         <div aria-hidden="true" class="pointer-events-none absolute inset-0">
-          <span class="absolute left-1/2 top-8 h-64 w-64 -translate-x-1/2 rounded-full bg-gradient-violet opacity-15 blur-[100px] dark:opacity-25"></span>
-          <span class="absolute bottom-0 right-4 h-48 w-48 rounded-full bg-gradient-magenta opacity-10 blur-[100px] dark:opacity-15"></span>
+          <span class="absolute left-1/2 top-8 h-64 w-64 -translate-x-1/2 rounded-full bg-gradient-violet opacity-10 blur-[100px] dark:opacity-25"></span>
+          <span class="absolute bottom-0 right-4 h-48 w-48 rounded-full bg-gradient-magenta opacity-5 blur-[100px] dark:opacity-15"></span>
         </div>
-        <div class="relative">
-          <Image
-            src={profile}
-            alt="Md. Omar Ali in a black suit"
-            widths={[480, 800]}
-            sizes="(max-width: 768px) 100vw, 400px"
-            quality="high"
-            class="relative w-full [mask-image:radial-gradient(ellipse_80%_85%_at_50%_42%,black_62%,transparent_98%)] dark:drop-shadow-[0_36px_60px_rgba(24,104,219,0.32)]"
-          />
-          <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-canvas to-transparent"></div>
-        </div>
+        <Image
+          src={profile}
+          alt="Md. Omar Ali in a black suit"
+          widths={[480, 800]}
+          sizes="(max-width: 768px) 100vw, 400px"
+          quality="high"
+          class="relative w-full [mask-image:linear-gradient(to_bottom,black_80%,transparent_99%)] dark:drop-shadow-[0_36px_60px_rgba(24,104,219,0.32)]"
+        />
       </div>
     </div>
 

@@ -2,6 +2,16 @@ name = "mdomarali-brief"
 main = "brief.ts"
 compatibility_date = "2026-09-01"
 
+[vars]
+TO_EMAIL = "hello@mdomarali.com"
+FROM_EMAIL = "Brief <brief@mdomarali.com>"
+SITE_ORIGIN = "https://mdomarali.com"
+
+# Secret (set once, never committed):
+#   cd worker
+#   $env:RESEND_API_KEY="re_..." | npx wrangler secret put RESEND_API_KEY
+#   (or: npx wrangler secret put RESEND_API_KEY, then paste when prompted)
+
 # After deploy, add a route so the Astro site can POST to /api/brief:
 # Cloudflare dashboard → Workers & Pages → this worker → Settings → Domains & Routes
 # → Add route: mdomarali.com/api/brief
