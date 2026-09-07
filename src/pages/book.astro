@@ -29,30 +29,11 @@ const EMAIL = site.email;
       </p>
     </div>
 
-    <div class="book-cal-wrap mx-auto mt-10 w-full min-w-0 max-w-4xl overflow-clip rounded-xxl border border-hairline-soft bg-canvas">
-      <div id="book-cal" class="book-cal-empty min-w-0"></div>
+    <div class="mx-auto mt-10 max-w-4xl overflow-hidden rounded-xxl border border-hairline-soft">
+      <div id="book-cal" class="book-cal-empty"></div>
     </div>
 
 <style>
-  .book-cal-wrap {
-    /* Clip Cal's fixed-min-width month_view on small screens instead of
-       letting a white/canvas gutter show on the right. */
-    max-width: 100%;
-    isolation: isolate;
-  }
-  #book-cal {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-  }
-  #book-cal iframe {
-    display: block;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    border: 0;
-    margin: 0;
-  }
   /* Loading placeholder only: removed automatically once Cal mounts its iframe. */
   #book-cal.book-cal-empty:empty {
     min-height: 560px;
@@ -125,40 +106,10 @@ const EMAIL = site.email;
     // Placeholder styles live on :empty, so they vanish the moment Cal
     // appends its iframe — no JS cleanup needed.
     Cal("init", { origin: "https://app.cal.com" });
-    // Theme the booker to match the site so the Cal.com footer bar blends
-    // in (cross-origin iframe, so we cannot query/hide nodes inside it).
-    // Full removal needs Cal dashboard → Appearance → Disable branding (paid).
-    Cal("ui", {
-      theme: "auto",
-      layout: "month_view",
-      cssVarsPerTheme: {
-        light: {
-          "cal-bg": "#ffffff",
-          "cal-bg-emphasis": "#f4f4f4",
-          "cal-border-booker": "#e6e6e6",
-          "cal-border-booker-width": "0px",
-          radius: "30px",
-        },
-        dark: {
-          "cal-bg": "#090909",
-          "cal-bg-emphasis": "#141414",
-          "cal-bg-subtle": "#141414",
-          "cal-border-booker": "#1a1a1a",
-          "cal-border-booker-width": "0px",
-          radius: "30px",
-        },
-      },
-    });
     Cal("inline", {
       elementOrSelector: "#book-cal",
       calLink: calPath,
-      config: {
-        layout: "month_view",
-        theme: "auto",
-        // Stack calendar → slots on phones instead of squeezing the
-        // 3-column desktop grid (fixes the right-side gap on ~440px).
-        useSlotsViewOnSmallScreen: "true",
-      },
+      config: { layout: "month_view", theme: "auto" },
     });
   } catch (e) {
     /* Embed blocked (e.g. adblocker) — fallback links above cover booking. */
