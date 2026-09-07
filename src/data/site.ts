@@ -1,7 +1,7 @@
 // Single source of truth for site-wide contact links, proof stats,
 // navigation, meta, and CTA labels. Edit here and every section follows.
 export const site = {
-  url: "https://mdomarali.com",
+  url: "https://mdomarali.pages.dev",
   name: "Md. Omar Ali",
   email: "hello@mdomarali.com",
   calLink: "https://cal.com/mdomarali.com/15min",

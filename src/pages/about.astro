@@ -36,14 +36,18 @@ import { notes } from "../data/notes";
           <span class="absolute left-1/2 top-8 h-64 w-64 -translate-x-1/2 rounded-full bg-gradient-violet opacity-10 blur-[100px] dark:opacity-25"></span>
           <span class="absolute bottom-0 right-4 h-48 w-48 rounded-full bg-gradient-magenta opacity-5 blur-[100px] dark:opacity-15"></span>
         </div>
-        <Image
-          src={profile}
-          alt="Md. Omar Ali in a black suit"
-          widths={[480, 800]}
-          sizes="(max-width: 768px) 100vw, 400px"
-          quality="high"
-          class="relative w-full [mask-image:linear-gradient(to_bottom,black_80%,transparent_99%)] dark:drop-shadow-[0_36px_60px_rgba(24,104,219,0.32)]"
-        />
+        {/* Framed crop: the cutout asset has leftover background chunks at its
+            edges, so scale past them inside an overflow-hidden frame. */}
+        <div class="relative overflow-hidden rounded-xxl border border-hairline-soft">
+          <Image
+            src={profile}
+            alt="Md. Omar Ali in a black suit"
+            widths={[480, 800]}
+            sizes="(max-width: 768px) 100vw, 400px"
+            quality="high"
+            class="relative w-full scale-[1.12] object-cover object-[50%_20%] [mask-image:linear-gradient(to_bottom,black_88%,transparent_99%)] dark:drop-shadow-[0_36px_60px_rgba(24,104,219,0.32)]"
+          />
+        </div>
       </div>
     </div>
 

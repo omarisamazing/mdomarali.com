@@ -3,9 +3,14 @@ main = "brief.ts"
 compatibility_date = "2026-09-01"
 
 [vars]
-TO_EMAIL = "hello@mdomarali.com"
-FROM_EMAIL = "Brief <brief@mdomarali.com>"
-SITE_ORIGIN = "https://mdomarali.com"
+TO_EMAIL = "omarisamazing365@gmail.com"
+FROM_EMAIL = "Brief <onboarding@resend.dev>"
+SITE_ORIGIN = "https://mdomarali.pages.dev,http://localhost:4321,http://localhost:4320"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mdomarali-briefs"
+database_id = "9e52a890-d485-411b-9658-7292acc4a67d"
 
 # Secret (set once, never committed):
 #   cd worker
